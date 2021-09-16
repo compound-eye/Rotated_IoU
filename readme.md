@@ -26,12 +26,16 @@ Code is tested on Ubuntu 18.04. Following dependencies are needed
     matplotlib
     argparse
 
-## Usage
+## Installation
 
 First, compile the CUDA extension.
 
-    cd cuda_op
-    python setup.py install
+    cd bbox_iou/cuda_op
+    python setup.py build
+    cp build/lib*/sort_vertices.cpython* ../
+    cd ../..
+    python setup.py bdist_wheel
+    pip install dist/bbox_iou*
 
 Then, run a demo which validate the Pytorch functions and CUDA extension.
 
