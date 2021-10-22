@@ -36,6 +36,34 @@ First, compile the CUDA extension.
     python setup.py bdist_wheel
     pip install bbox_iou/cuda_op/dist/bbox_iou*
 
+Notes:
+The step `python setup.py bdist_wheel` may fail to compile. A few notes that can help to fix it if you are in a conda env.
+
+1. install pytorch with cuda10.2
+```
+conda install pytorch torchvision cudatoolkit=10.2
+```
+
+2. Now it should build. But it may complain about the following
+
+A:
+```
+In file included from /usr/local/cuda/include/cuda_runtime.h:83,
+                 from <command-line>:
+/usr/local/cuda/include/crt/host_config.h:138:2: error: #error -- unsupported GNU version! gcc versions later than 8 are not supported!
+```
+
+Solution: check the last line above the error. if it has "-ccbin /some/path/to/bin/x86_64-conda-linux-gnu-cc". Make sure the "-ccbin" it uses is a gcc of version < 8
+
+B:
+```
+error trying to exec 'cc1plus': execvp: No such file or directory
+```
+
+Solution: find your g++ and cc1plus. They are at the same folder. soft link cc1plus to add it to the same folder of "-ccbin". 
+sudo ln -s  /usr/lib/gcc/x86_64-linux-gnu/7/cc1plus /some/path/to/bin/cc1plus --force
+
+
 Then, run a demo which validate the Pytorch functions and CUDA extension.
 
     cd ..
